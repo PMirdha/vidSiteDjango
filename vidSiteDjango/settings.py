@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'audio.apps.AudiConfig',
     'video.apps.VideoConfig',
     'django.contrib.admin',
     'django.contrib.auth',
