@@ -25,10 +25,23 @@ class UserExtraDetail(models.Model):
 class OrderDetail(models.Model):
 	"""docstring for OrderDetail"""
 	user_id=models.ForeignKey(User)
+	total_item=models.IntegerField()
+	order_description=models.CharField(max_length=3000)
+	order_time=models.DateField(auto_now=True)
+	total_amount=models.IntegerField()
+	delivered_flag=models.BooleanField()
+	cancelled_flag=models.BooleanField()
+
+	def __str__(self):
+		return User.objects.get(pk=self.user_id).name +" "+ slef.order_description
 
 
-class TransDetail(models.Model):
+
+
+
+#class TransDetail(models.Model):
 	"""docstring for TransactionDetail"""
+
 
 		
 		
