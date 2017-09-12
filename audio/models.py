@@ -31,11 +31,12 @@ class UserExtraDetail(models.Model):
 	address=models.CharField(max_length=100)
 
 	def __str__(self):
-		return self.user_id.name
+		return self.user_id.username
 
 class OrderDetail(models.Model):
 	"""docstring for OrderDetail"""
 	user_id=models.ForeignKey(User)
+	audio_track_detail=models.ManyToManyField(AudioTrackDetail,through='OrderItemDetail')
 	total_item=models.IntegerField()
 	order_description=models.CharField(max_length=3000)
 	order_time=models.DateField(auto_now=True)
@@ -47,6 +48,13 @@ class OrderDetail(models.Model):
 		return self.user_id.name +" "+ slef.order_description
 
 
+class OrderItemDetail(models.Model):
+	"""docstring for OrderItemDetail"""
+	audio_track_detail=models.ForeignKey(AudioTrackDetail)
+	order_detail=models.ForeignKey(OrderDetail,on_delete=models.CASCADE)
+	quantity=models.IntegerField();
+	amount=models.FloatField();
+		
 
 
 
@@ -55,36 +63,4 @@ class OrderDetail(models.Model):
 
 
 		
-		
-		
-#from django.db import models
-class Blog(models.Model):
-	name = models.CharField(max_length=100)
-	tagline = models.TextField()
-
-	def __str__(self):
-		return self.name
-# __unicode__ on Python 2
-
-class Author(models.Model):
-	name = models.CharField(max_length=200)
-	email = models.EmailField()
-
-	def __str__(self):
-		return self.name
-# __unicode__ on Python 2
-
-class Entry(models.Model):
-	blog = models.ForeignKey(Blog)
-	authors = models.ManyToManyField(Author)
-
-	headline = models.CharField(max_length=255)
-	body_text = models.TextField()
-	pub_date = models.DateField()
-	mod_date = models.DateField()
-	n_comments = models.IntegerField()
-	n_pingbacks = models.IntegerField()
-	rating = models.IntegerField()
-
-	def __str__(self):
-		return self.headline
+	

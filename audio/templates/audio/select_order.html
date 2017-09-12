@@ -1,1 +1,13 @@
-<h1>This is select order view</h1>
+<h1>These are all available audios</h1>
+<form>
+	{%for genre in audio_track_genre%}
+		<h2>{{genre.genre_description}}</h2></br>
+		{%for audio_track in genre.audiotrackdetail_set.all%}
+			<p>{{forloop.counter}}.&nbsp;{{audio_track.title}}&nbsp;&nbsp;
+				<input type="number" name="dish_{{audio_track.id}}" min="0" >
+			</p>
+		{%endfor%}
+		</br>
+	{%endfor%}
+	<input type="submit" name="submit">
+</form>
