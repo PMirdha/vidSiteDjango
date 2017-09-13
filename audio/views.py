@@ -23,8 +23,9 @@ class CreateOrderView(View):
 		context={'audio_track_genre':audio_track_genre}
 		return render(request,'audio/select_order.html',context)
 
-	def put(self,request):
+	def post(self,request):
 		context={}
+		return HttpResponse(request.POST)
 		return render(request,'audio/select_order.html',context)
 
 
