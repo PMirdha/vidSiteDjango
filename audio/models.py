@@ -2,9 +2,9 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.validators import MaxLengthValidator,MinLengthValidator
+from django.core.validators import MaxLengthValidator,MinLengthValidator,RegexValidator
 
-
+NumCharOnly=RegexValidator(r'^[0-9]*$', 'Only numeric characters are allowed.')
 
 # Create your models here.
 class AudioTrackGenre(models.Model):
@@ -27,7 +27,7 @@ class AudioTrackDetail(models.Model):
 class UserExtraDetail(models.Model):
 	"""docstring for TransactionDetail"""
 	user_id=models.ForeignKey(User,on_delete=models.CASCADE)
-	mobile_no=models.IntegerField(validators=[MaxLengthValidator(10),MinLengthValidator(10)])
+	mobile_no=models.IntegerField(validators=[MaxLengthValidator(10),MinLengthValidator(10),NumCharOnly])
 	address=models.CharField(max_length=100)
 
 	def __str__(self):

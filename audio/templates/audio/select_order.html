@@ -1,10 +1,12 @@
-<h1>These are all available audios</h1>
+<h1>Welcome {{user.username}}</h1>
+<h2>These are all available audios</h2>
 <form>
+	<input type="submit" name="submit">
 	{%for genre in audio_track_genre%}
 		<h2>{{genre.genre_description}}</h2></br>
 		{%for audio_track in genre.audiotrackdetail_set.all%}
-			<p>{{forloop.counter}}.&nbsp;{{audio_track.title}}&nbsp;&nbsp;
-				<input type="number" name="dish_{{audio_track.id}}" min="0" >
+			<p>{{forloop.counter}}.&nbsp;{{audio_track.title}}&nbsp;&nbsp;</br>Amount- Rs. {{audio_track.price}}&nbsp;&nbsp;
+				<input type="number" name="track_{{audio_track.id}}" min="0" max="100000" >
 			</p>
 		{%endfor%}
 		</br>
