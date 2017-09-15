@@ -6,32 +6,65 @@ from django.urls import reverse
 from django.views import generic,View
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login
-from .models import AudioTrackGenre,OrderDetail,UserExtraDetail,AudioTrackDetail
-from .forms import UserRegistrationForm,AudioGenreForm,TrackDetailForm,LoginForm
+from django.forms.formsets import formset_factory
+from .models import * #AudioTrackGenre,OrderDetail,UserExtraDetail,AudioTrackDetail
+from .forms import * #UserRegistrationForm,AudioGenreForm,TrackDetailForm,LoginForm,LinkForm
 
 # Create your views here.
 
 def indexView(request):
 	context={}
-
+	s=request.session
+	if('num_of_items' in s):
+		del s['num_of_items']
+	if('order_detail' in s):
+		del s['order_detail']
+	s.modified=True
 	return render(request,'audio/index.html',context)
 
 class CreateOrderView(View):
-
+	audio_track_genre=AudioTrackGenre.objects.all()
 	def get(self,request):
-		audio_track_genre=AudioTrackGenre.objects.all()
-		context={'audio_track_genre':audio_track_genre}
-		return render(request,'audio/select_order.html',context)
+		context={}
+		s=request.session
+		if request.GET.get('gen_it_id') is None:
+			context={'audio_track_genre':self.audio_track_genre}
+			return render(request,'audio/select_order.html',context)
+		else:
+			gitid=request.GET.get('gen_it_id')
+			if ('order_detail' not in s):
+				s['order_detail']={}
+			if(gitid not in s['order_detail']):
+				s['order_detail'][gitid]=1
+			else:
+				s['order_detail'][gitid]+=1
+			s.modified=True
+			return HttpResponse(gitid)
 
 	def post(self,request):
 		context={}
-		return HttpResponse(request.POST)
-		return render(request,'audio/select_order.html',context)
+		if('order_detail' in request.session):
+			return HttpResponseRedirect(reverse('audio:order_view'))
+		else:
+			context={'audio_track_genre':self.audio_track_genre}
+			return render(request,'audio/select_order.html',context)
 
 
 class OrderDetailView(generic.DetailView):
-	template_name='audio/order_detail.html'
-	model = OrderDetail
+	context={}
+	form=[]
+	def get(self,request):
+		s=request.session
+		gitid_vals=s['order_detail'].keys()
+		#return HttpResponse(gitid_vals)
+		for val in gitid_vals:
+			print(val)
+			self.form.append({'quantity':s['order_detail'][val],'gitid':val})
+		self.context={'form':self.form}
+		return render(request,'audio/order_detail.html',self.context)
+
+	def post(self,request):
+		self.context={}
 
 
 

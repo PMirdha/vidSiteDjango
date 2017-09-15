@@ -1,1 +1,19 @@
+{%load staticfiles%}
 <h1>This is order detail view</h1>
+
+
+
+<form method="post" action="">
+{%csrf_token%}
+<ul style="list-style: none;">
+	<li>
+		{%for field in form%}
+			<h3>{{field.gitid}}</h3>
+			<input type="number" name="{{field.gitid}}" min="1" value="{{field.quantity}}">
+		{%endfor%}
+	</li>
+</ul>
+
+<input type="submit" name="" value="Check Out">
+
+</form>

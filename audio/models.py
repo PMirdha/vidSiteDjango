@@ -45,7 +45,7 @@ class OrderDetail(models.Model):
 	cancelled_flag=models.BooleanField()
 
 	def __str__(self):
-		return self.user_id.name +" "+ slef.order_description
+		return self.user_id.username +"-"+ self.order_description
 
 
 class OrderItemDetail(models.Model):

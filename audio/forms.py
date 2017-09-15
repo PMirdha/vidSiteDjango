@@ -3,7 +3,10 @@ from .models import AudioTrackGenre,AudioTrackDetail
 from django.contrib.auth.models import User
 from django.core.validators import MaxLengthValidator,MinLengthValidator,RegexValidator
 
+#Starting of Validators
 NumCharOnly=RegexValidator(r'^[0-9]*$', 'Only numeric characters are allowed for Mobile Number.')
+#Ending of Validators
+
 #genre_list=AudioTrackGenre.objects.values_list("genre_description")
 genre_list=[]
 for genre in AudioTrackGenre.objects.all():
@@ -42,5 +45,3 @@ class LoginForm(forms.Form):
 
 	username=forms.CharField(max_length=100)
 	password=forms.CharField(widget=forms.PasswordInput)
-
-
