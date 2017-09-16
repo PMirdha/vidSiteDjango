@@ -54,7 +54,9 @@ class OrderItemDetail(models.Model):
 	order_detail=models.ForeignKey(OrderDetail,on_delete=models.CASCADE)
 	quantity=models.IntegerField();
 	amount=models.FloatField();
-		
+	
+	def __str__(self):
+		return (self.order_detail.user_id.username)+"-"+str(self.amount)
 
 
 

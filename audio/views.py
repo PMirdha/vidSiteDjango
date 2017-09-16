@@ -15,8 +15,6 @@ from .forms import * #UserRegistrationForm,AudioGenreForm,TrackDetailForm,LoginF
 def indexView(request):
 	context={}
 	s=request.session
-	if('num_of_items' in s):
-		del s['num_of_items']
 	if('order_detail' in s):
 		del s['order_detail']
 	s.modified=True
@@ -24,6 +22,7 @@ def indexView(request):
 
 class CreateOrderView(View):
 	audio_track_genre=AudioTrackGenre.objects.all()
+	form_class=CreateOrderForm
 	def get(self,request):
 		context={}
 		s=request.session
@@ -31,15 +30,27 @@ class CreateOrderView(View):
 			context={'audio_track_genre':self.audio_track_genre}
 			return render(request,'audio/select_order.html',context)
 		else:
-			gitid=request.GET.get('gen_it_id')
-			if ('order_detail' not in s):
-				s['order_detail']={}
-			if(gitid not in s['order_detail']):
-				s['order_detail'][gitid]=1
+			form=self.form_class(request.GET)
+			#print(form.cleaned_data('gen_it_id'))
+			if form.is_valid():
+				gitid=request.GET.get('gen_it_id')
+				genre_id,item_id=gitid.split('_')
+				genre_id=int(genre_id)
+				item_id=int(item_id)
+				if(AudioTrackDetail.objects.filter(pk=item_id).count()==1):
+					if ('order_detail' not in s):
+						s['order_detail']={}
+					if(gitid not in s['order_detail']):
+						s['order_detail'][gitid]=1
+					else:
+						s['order_detail'][gitid]+=1
+					s.modified=True
+					return HttpResponse(gitid)
+				else:
+					return HttpResponse("Nothing is right")
 			else:
-				s['order_detail'][gitid]+=1
-			s.modified=True
-			return HttpResponse(gitid)
+				return HttpResponse("Nothing is right")
+				
 
 	def post(self,request):
 		context={}
@@ -58,13 +69,44 @@ class OrderDetailView(generic.DetailView):
 		gitid_vals=s['order_detail'].keys()
 		#return HttpResponse(gitid_vals)
 		for val in gitid_vals:
-			print(val)
+			#print(val)
 			self.form.append({'quantity':s['order_detail'][val],'gitid':val})
 		self.context={'form':self.form}
 		return render(request,'audio/order_detail.html',self.context)
 
 	def post(self,request):
 		self.context={}
+		track_detail=AudioTrackDetail.objects.all()
+		user=request.user
+		order=OrderDetail()
+		order.user_id=user
+		order.total_item=len(self.form)
+		order.order_description="Nothing right now"
+		order.total_amount=0
+		order.delivered_flag=False
+		order.cancelled_flag=False
+		order.save()
+		tamount=0
+		for field in self.form:
+			genre_id,item_id=field['gitid'].split('_')
+			quantity=int(field['quantity'])
+			atd=track_detail.get(pk=item_id)
+			price=atd.price
+			tamount+=(quantity*price)
+			item_detail=OrderItemDetail()
+			item_detail.audio_track_detail=atd
+			item_detail.order_detail=order
+			item_detail.quantity=quantity
+			item_detail.amount=(quantity*price)
+			item_detail.save()
+		order.total_amount=tamount
+		order.save()
+		s=request.session
+		if('order_detail' in s):
+			del s['order_detail']
+		s.modified=True
+		return redirect('audio:index_view')
+
 
 
 
