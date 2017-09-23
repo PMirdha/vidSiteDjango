@@ -1,18 +1,20 @@
 $(document).ready(function() {	
 	$(".add_button").click(function() {
-		//alert($(this).attr('name'));
 		//Start Ajax request
+		var item_id=$(this).attr('id');
+		var item_title=$(this).attr('value');
+		var payload={"item_id":item_id,"item_title":item_title};
+		//alert(item_title);
 		var self_var=this;
 		$.get("",
-			{"gen_it_id":$(this).attr('value')},
+			payload,
 			function (data) {
-				//alert(data);
-				//var n = data;
-				$("#last_summary").before("<input type='text' name='audio_name"+
-								//$(self_var).attr('value')+
-								//n+
-								"' readonly='true' value='"+
-								$(self_var).attr('id')+
+				if($(''))
+
+				$("#last_summary").before("<input type='text' name='audio_name'"+
+								"id='"+item_id+"'"+
+								" readonly='true' value='"+
+								item_title+
 								"' >");
 			});
 	});

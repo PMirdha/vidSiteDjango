@@ -1,6 +1,15 @@
 <h1>Enter credientials here to LOGIN!!</h1>
+
+{%if messages%}
+	{%for message in messages%}
+		<h3>{{message}}</h3>
+	{%endfor%}
+{%endif%}
+
 <form action="" method="post">
 	{% csrf_token %}
 	{%include 'audio/form_template.html'%}
 	<input type="submit" name="submit">
 </form>
+
+<p><a href="{% url 'audio:register_view' %}">Click Here to register</a></p>

@@ -1,5 +1,10 @@
-<h3>This is index page </h3>
+<h2>This is index page </h2>
 
+{%if messages%}
+	{%for message in messages%}
+		<h3>{{message}}</h3>
+	{%endfor%}
+{%endif%}
 
 <h1>Click here to order &nbsp;
 
@@ -20,3 +25,7 @@
 <h1>Click here to Login &nbsp;
 
 <a href="{%url 'audio:login_view' %}">Login</a></h1>
+
+<h1>Click here to Logout &nbsp;
+
+<a href="{%url 'audio:logout_view' %}">Logout</a></h1>

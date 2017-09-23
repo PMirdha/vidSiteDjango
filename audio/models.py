@@ -27,6 +27,7 @@ class AudioTrackDetail(models.Model):
 class UserExtraDetail(models.Model):
 	"""docstring for TransactionDetail"""
 	user_id=models.ForeignKey(User,on_delete=models.CASCADE)
+	user_name=models.CharField(max_length=100,null=True)
 	mobile_no=models.IntegerField(validators=[MaxLengthValidator(10),MinLengthValidator(10),NumCharOnly])
 	address=models.CharField(max_length=100)
 
@@ -45,7 +46,7 @@ class OrderDetail(models.Model):
 	cancelled_flag=models.BooleanField()
 
 	def __str__(self):
-		return self.user_id.username +"-"+ self.order_description
+		return self.user_id.username +"-> "+ str(self.order_time)
 
 
 class OrderItemDetail(models.Model):
@@ -56,7 +57,7 @@ class OrderItemDetail(models.Model):
 	amount=models.FloatField();
 	
 	def __str__(self):
-		return (self.order_detail.user_id.username)+"-"+str(self.amount)
+		return str(self.order_detail)+" & amount-"+str(self.amount)
 
 
 

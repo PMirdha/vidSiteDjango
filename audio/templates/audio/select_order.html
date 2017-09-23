@@ -1,6 +1,13 @@
 {%load staticfiles%}
 
-<h1>Welcome {{user.username}}</h1>
+<h1>Welcome
+	{% if user.username  %}
+		{{user.username}}
+	{% else %}
+		Guest
+	{%endif%}
+</h1>
+	
 <h2>These are all available audios</h2>
 
 <div class="row">
@@ -14,7 +21,7 @@
 					{%for audio_track in genre.audiotrackdetail_set.all%}
 						<form method="get" onsubmit="event.preventDefault(); submitOk();">
 							<p>{{forloop.counter}}.&nbsp;{{audio_track.title}}&nbsp;&nbsp;</br>Amount- Rs. {{audio_track.price}}&nbsp;&nbsp;
-							<button class="add_button" id="{{audio_track.title}}" type="submit" name="gen_it_id" value="{{genre.id}}_{{audio_track.id}}">Add</button>
+							<button class="add_button" id="{{audio_track.id}}" type="submit" name="item_id" value="{{audio_track.title}}">Add</button>
 							</p>
 						</form>
 					{%endfor%}
@@ -51,3 +58,9 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <script src="{% static 'audio/create_order.js' %}"></script>
+
+
+
+
+
+<input type='text' name='audio_name' readonly='true' value='"+$(self_var).attr('id')+"' id='"++"'>

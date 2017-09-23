@@ -5,7 +5,6 @@ from django.core.validators import MaxLengthValidator,MinLengthValidator,RegexVa
 
 #Starting of Validators
 NumCharOnly=RegexValidator(r'^[0-9]*$', 'Only numeric characters are allowed for Mobile Number.')
-Genre_ItemCombo=RegexValidator(r'^[0-9]+_[0-9]+$', 'Only numeric characters are allowed for Mobile Number.')
 #Ending of Validators
 
 #genre_list=AudioTrackGenre.objects.values_list("genre_description")
@@ -46,9 +45,4 @@ class LoginForm(forms.Form):
 
 	username=forms.CharField(max_length=100)
 	password=forms.CharField(widget=forms.PasswordInput)
-
-
-class CreateOrderForm(forms.Form):
-	"""docstring for CreateOrderForm"""
-	gen_it_id=forms.CharField(validators=[Genre_ItemCombo])
 		
